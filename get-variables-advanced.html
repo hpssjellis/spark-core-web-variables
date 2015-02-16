@@ -2,7 +2,7 @@
 <head>
 
 
-<title>Get Spark Core Variables</title>
+<title>Post Spark Core </title>
 
 <font style="font-size:30px">
 
@@ -52,16 +52,26 @@ function postData(url, parameters, myDivToChange2){
              
            //document.getElementById(myDivToChange2).innerHTML=xmlHttp.responseText+' data sent was '+parameters;
          
-           document.getElementById(myDivToChange2).innerHTML= myJsonObject.return_value;
+           document.getElementById(myDivToChange2).innerHTML= myJsonObject.result;
          
          
          
       }
    }
-   xmlHttp.open("POST", url, true);
+
+
+
+   xmlHttp.open("GET", url, true);
    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
    xmlHttp.send(parameters);
 }
+
+
+
+
+
+
+
 function getFormValues(fobj){
    var str = "";
    var valueArr = null;
@@ -85,12 +95,15 @@ function getFormValues(fobj){
 }
 function sendToSpark(){
     
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/' + document.all.myFunctionName.value
+    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/' + document.all.myFunctionName.value +
+       '?access_token='+document.all.myToken.value
     document.all.mySend.value = document.myForm.action 
     myAjax(document.all.myCoolForm, document.myForm.action, 'myDivId')   
     
 }
 //--></script>
+
+
 
 
 
@@ -143,11 +156,24 @@ Device ID:-----------<input id="myDeviceId" name="myCoreID" type=text size=50 pl
 Get this from the core area when logged in<br>
 
 
-Function Name:-----<input id="myFunctionName" name="myFunction"  type=text size=50 value="mess" > 
+Function Name:-----<input id="myFunctionName" name="myFunction"  type=text size=50 value="my-main" > 
 Get this from the program you flashed to your spark core<br>
-try mess, analogvalue, temp<br>
 
-
+Set the parameters yourself:--<select size=1 onChange="{
+  document.all.myParameter.value=this.value
+}">
+    <option value='d7-send-high'>d7-send-high</option>
+    <option value='D7-SEND-OFF'>D7-SEND-OFF</option>
+    <option value='d7-send-on'>d7-send-on</option>
+    <option value='d7-send-off'>d7-send-off</option>
+    <option value='d6-send-1'>d6-send-1</option>
+    <option value='d6-send-0'>d6-send-0</option>
+    <option value='d5-read'>d5-read</option>
+    <option value=''></option>
+    <option value='a0-send-0'>a0-send-0</option>
+    <option value='a0-send-255'>a0-send-255</option>
+    <option value='a1-read'>a1-read</option>
+</select>
 
 
 
@@ -157,6 +183,8 @@ Start form elements to be sent including the acces_token and the parameters
 
 
 <form name="myForm" method="GET" id="myCoolForm" ><br>
+
+Parameter if needed:<input id="myParameter" name="params" type=text size=50 placeholder="d7-send-high"> Your Function may need these <br>
 
 Access Token:-------<input id="myToken" name="access_token" type=text size=50 placeholder="5622ce6bba702ef6bd3456d5ed26aaa4a28d7c9"> 
 Get this from the settings area when logged into <a href="http://spark.io">http://spark.io</a><br><br>
@@ -212,24 +240,82 @@ Example direct buttons --><br>
 
 
 
-<input type="button" value="View Message" onClick="{
-    document.all.myFunction.value='mess'
+<input type="button" value="d7-send-1" onClick="{
+    document.all.myParameter.value='d7-send-1'
     sendToSpark()
 }">
 
 
-<input type="button" value="View Analog Value" onClick="{
-    document.all.myFunction.value='analogvalue'
+
+<input type="button" value="d7-send-0" onClick="{
+    document.all.myParameter.value='d7-send-0'
     sendToSpark()
 }">
 
 
-<input type="button" value="View Temperature" onClick="{
-    document.all.myFunction.value='temp'
+<input type="button" value="d6-send-1" onClick="{
+    document.all.myParameter.value='d6-send-1'
     sendToSpark()
 }">
 
 
+<input type="button" value="d6-send-0" onClick="{
+    document.all.myParameter.value='d6-send-0'
+    sendToSpark()
+}">
+
+
+
+<input type="button" value="d5-read" onClick="{
+    document.all.myParameter.value='d5-read'
+    sendToSpark()
+}">
+
+
+
+<input type="button" value="a0-send-255" onClick="{
+    document.all.myParameter.value='a0-send-255'
+    sendToSpark()
+}">
+
+
+
+<input type="button" value="a0-send-0" onClick="{
+    document.all.myParameter.value='a0-send-0'
+    sendToSpark()
+}">
+
+
+
+
+
+<input type="button" value="a1-read" onClick="{
+    document.all.myParameter.value='a1-read'
+    sendToSpark()
+}">
+
+
+
+
+<input type="button" value="a1-read:Polling" onClick="{
+    if(document.all.myPoll.value < '5'){document.all.myPoll.value = 5}
+    document.all.myParameter.value='a1-read'
+    sendToSpark()
+    clearInterval(document.myPollSave) 
+    document.myPollSave = setInterval('myPollFun()',document.all.myPoll.value*1000)
+}">
+<script>
+function myPollFun(){
+    document.all.myParameter.value='a1-read'
+    sendToSpark()
+}
+    
+</script>
+every <input type=text size=5 value=5 id="myPoll">Seconds
+
+<input type="button" value="Clear Polling" onClick="{
+    clearInterval(document.myPollSave) 
+}">
 
 
 
@@ -245,7 +331,7 @@ Example direct buttons --><br>
 You sent a command similar to (timeout can be 30 seconds long):Notice your access_token and Params are not visible 
 since they are sent using POST which safely hides them
 <br>
-<textarea rows=5 cols=70 id="mySend">https://api.spark.io/v1/devices/55gg76065075555387781787/mess</textarea><br>
+<textarea rows=5 cols=70 id="mySend">https://api.spark.io/v1/devices/55gg76065075555387781787/d7-on</textarea><br>
 
 
 What is returned from the spark cloud server goes below here. Should be under 2 seconds<br>
@@ -257,6 +343,57 @@ What is returned from the spark cloud server goes below here. Should be under 2 
 
 
 
+<input type=button id="myToVolts" value="A1 Sensor in Volts" onclick="{
+  var myTemp = parseFloat(getElementById('myDivId').innerHTML)
+  document.all.myCalc1.value = (myTemp * 3.3 / 4095).toFixed(2);
+}">
+Sensor A1 reading in Volts: <input type=text id="myCalc1" value=0>Volts <br><br><br>
+<hr>
+<br><br><br>
+
+
+<input type="button" id="mySlider1" value="a0-send-255:slider" style="position:absolute; left:100px; top:1000px; height:100px"  
+
+
+onmouseout="{
+    var myTop = parseInt(document.all.mySlider1.style.top)-1000
+    if(myTop < 0){myTop = 0}
+    if(myTop > 255){myTop = 255}
+    document.all.myParameter.value='a0-send-'+ myTop+ ':slider'
+    sendToSpark()
+}"
+
+
+onMouseMove="{
+  var myNewTop = event.clientY + document.body.scrollTop -50 
+  if (myNewTop < 1000){myNewTop = 1000}
+  if (myNewTop > 1000+255){myNewTop = 1000+255}
+  var myNewTopAdjusted = Math.round(myNewTop - 1000)
+  document.all.mySlider1.value = 'a0-send-' + myNewTopAdjusted + ':slider'
+  document.all.mySlider1.style.top = myNewTop + 'px'
+}"
+
+
+onTouchEnd="{
+    var myTop = parseInt(document.all.mySlider1.style.top)-1000
+    if(myTop < 0){myTop = 0}
+    if(myTop > 255){myTop = 255}
+    document.all.myParameter.value='a0-send-'+ myTop+ ':tap'
+    sendToSpark()
+}"
+
+
+onTouchMove="{   // works like a tap not a slide
+  var myNewTop =   event.changedTouches[0].clientY + document.body.scrollTop -50   
+  if (myNewTop < 1000){myNewTop = 1000}
+  if (myNewTop > 1000+255){myNewTop = 1000+255}
+  var myNewTopAdjusted = Math.round(myNewTop - 1000)
+  document.all.mySlider1.value = 'a0-send-' + myNewTopAdjusted + ':slider'
+  document.all.mySlider1.style.top = myNewTop + 'px'
+  event.preventDefault();
+}"
+
+>
 
 
 
@@ -276,4 +413,3 @@ What is returned from the spark cloud server goes below here. Should be under 2 
 </font>
 </body>
 </html>
-
