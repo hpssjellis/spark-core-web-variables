@@ -58,25 +58,8 @@ Device ID:-----------<input id="myDeviceId" name="myCoreID" type=text size=50 pl
 Get this from the core area when logged in<br>
 
 
-Function Name:-----<input id="myFunctionName" name="myFunction"  type=text size=50 value="my-main" > 
+Function Name:-----<input id="myFunctionName" name="myFunction"  type=text size=50 value="mess" > 
 Get this from the program you flashed to your spark core<br>
-
-Set the parameters yourself:--<select size=1 onChange="{
-  document.all.myParameter.value=this.value
-}">
-    <option value='d7-send-high'>d7-send-high</option>
-    <option value='D7-SEND-OFF'>D7-SEND-OFF</option>
-    <option value='d7-send-on'>d7-send-on</option>
-    <option value='d7-send-off'>d7-send-off</option>
-    <option value='d6-send-1'>d6-send-1</option>
-    <option value='d6-send-0'>d6-send-0</option>
-    <option value='d5-read'>d5-read</option>
-    <option value=''></option>
-    <option value='a0-send-0'>a0-send-0</option>
-    <option value='a0-send-255'>a0-send-255</option>
-    <option value='a1-read'>a1-read</option>
-</select>
-
 
 
 
@@ -84,9 +67,8 @@ Set the parameters yourself:--<select size=1 onChange="{
 Start form elements to be sent including the acces_token and the parameters
 
 
-<form name="myForm" method="POST" action = "https://api.spark.io/v1/devices/sparkCoreName/myTurnOn" target="myFrameName"><br>
+<form name="myForm" method="GET" action = "https://api.spark.io/v1/devices/sparkCoreName/myTurnOn" target="myFrameName"><br>
 
-Parameter if needed:<input id="myParameter" name="params" type=text size=50 placeholder="D7,DWR,HIGH"> Your Function may need these <br>
 
 Access Token:-------<input id="myToken" name="access_token" type=text size=50 placeholder="5622ce6bba702ef6bd3456d5ed26aaa4a28d7c9"> 
 Get this from the settings area when logged into <a href="http://spark.io">http://spark.io</a><br><br>
@@ -135,96 +117,12 @@ End form elements
 
 
 <br><br>
-Example direct buttons --><br>
 
 
 
 
 
 
-
-
-
-
-
-
-<input type="button" value="d7-send-1" onClick="{
-    document.all.myParameter.value='d7-send-1'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
-
-
-
-<input type="button" value="d7-send-0" onClick="{
-    document.all.myParameter.value='d7-send-0'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
-
-
-<input type="button" value="d6-send-1" onClick="{
-    document.all.myParameter.value='d6-send-1'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
-
-
-<input type="button" value="d6-send-0" onClick="{
-    document.all.myParameter.value='d6-send-0'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
-
-
-
-<input type="button" value="d5-read" onClick="{
-    document.all.myParameter.value='d5-read'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
-
-
-
-<input type="button" value="a0-send-255" onClick="{
-    document.all.myParameter.value='a0-send-255'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
-
-
-
-<input type="button" value="a0-send-0" onClick="{
-    document.all.myParameter.value='a0-send-0'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
-
-
-
-
-
-<input type="button" value="a1-read" onClick="{
-    document.all.myParameter.value='a1-read'
-    document.myForm.action = 'https://api.spark.io/v1/devices/' + document.all.myDeviceId.value + '/my-main'
-    document.all.mySend.value = document.myForm.action 
-    
-    document.myForm.submit();
-}">
 
 
 
@@ -243,7 +141,7 @@ Example direct buttons --><br>
 You sent a command similar to (timeout can be 30 seconds long):Notice your access_token and Params are not visible 
 since they are sent using POST which safely hides them
 <br>
-<textarea rows=5 cols=70 id="mySend">https://api.spark.io/v1/devices/55gg76065075555387781787/d7-on</textarea><br>
+<textarea rows=5 cols=70 id="mySend">https://api.spark.io/v1/devices/55gg76065075555387781787/mess</textarea><br>
 
 
 What is returned from the spark cloud server goes below here. Should be under 2 seconds<br>
@@ -262,5 +160,3 @@ What is returned from the spark cloud server goes below here. Should be under 2 
 
 </body>
 </html>
-
-
